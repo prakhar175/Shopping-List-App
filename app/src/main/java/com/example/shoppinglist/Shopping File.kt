@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -43,19 +44,15 @@ fun ShoppingListApp() {
     var itemName by remember { mutableStateOf("") }
     var itemQuantity by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Button(
-            onClick = { showDialog = true },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text(text = "Add Item")
-        }
-
+        // LazyColumn will fill the available space
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .padding(bottom = 80.dp) // Add padding to leave space for the button
         ) {
             items(sItems) { item ->
                 if (item.isEditing) {
@@ -80,13 +77,26 @@ fun ShoppingListApp() {
                 }
             }
         }
+
+        // Button placed at the bottom of the Box
+        Button(
+            onClick = { showDialog = true },
+            modifier = Modifier
+                .align(Alignment.Center) // Align the button to the bottom center
+                .padding(16.dp) // Optional padding around the button
+        ) {
+            Text(text = "Add Item")
+        }
     }
+
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
             confirmButton = {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(onClick = {
@@ -116,14 +126,18 @@ fun ShoppingListApp() {
                         value = itemName,
                         onValueChange = { itemName = it },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth().padding(8.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
                         label = { Text("Item Name") }
                     )
                     OutlinedTextField(
                         value = itemQuantity,
                         onValueChange = { itemQuantity = it },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth().padding(8.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
                         label = { Text("Quantity") }
                     )
                 }
@@ -131,6 +145,7 @@ fun ShoppingListApp() {
         )
     }
 }
+
 
 @Composable
 fun ShoppingItemEditor(item: ShoppingItem, onEditComplete: (String, Int) -> Unit) {
